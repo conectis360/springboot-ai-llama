@@ -1,8 +1,11 @@
 package com.example.springbootaiexaamples.model;
 
+import org.springframework.beans.factory.annotation.Value;
+
 import java.util.List;
 
 public class ChatRequest {
+    @Value("${lmstudio.ai.model}")
     private String model;
     private List<Message> messages;
     private double temperature;

@@ -1,6 +1,9 @@
 package com.example.springbootaiexaamples.controller;
 
 import com.example.springbootaiexaamples.model.ChatRequest;
+import com.example.springbootaiexaamples.model.ChatResponse;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.HttpEntity;
@@ -8,6 +11,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
@@ -37,7 +41,8 @@ public class AIController {
     }
 
     // POST /v1/chat/completions
-    public ResponseEntity<String> sendChatRequest(@RequestBody ChatRequest chatRequest) {
+    @PostMapping("/chat")
+    public ResponseEntity<String> sendChatRequest(@RequestBody ChatRequest chatRequest) throws JsonProcessingException {
         // Set up HTTP headers
         HttpHeaders headers = new HttpHeaders();
         headers.set("Content-Type", "application/json");
@@ -53,7 +58,17 @@ public class AIController {
                 String.class // The response type
         );
 
+        System.out.println(response.getBody());
+
+      ObjectMapper objectMapper = new ObjectMapper();
+        ChatResponse chatResponse = objectMapper.readValue(response.getBody(), ChatResponse.class);
+
+        System.out.println();
+
+        String responseString = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(chatResponse.getChoices().getFirst().getMessage());
+
         // Return the response to the client
-        return ResponseEntity.status(response.getStatusCode()).body(response.getBody());
+        return ResponseEntity.status(response.getStatusCode()).body(responseString
+        );
     }
 }

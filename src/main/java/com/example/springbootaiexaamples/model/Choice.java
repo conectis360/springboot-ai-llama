@@ -1,9 +1,12 @@
 package com.example.springbootaiexaamples.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class Choice {
     private int index;
     private Message message;
     private Object logprobs; // Can be replaced with a specific type if needed
+    @JsonProperty("finish_reason")
     private String finishReason;
 
     // Constructor

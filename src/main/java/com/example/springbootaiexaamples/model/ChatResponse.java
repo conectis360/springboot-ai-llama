@@ -1,5 +1,7 @@
 package com.example.springbootaiexaamples.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.util.List;
 
 public class ChatResponse {
@@ -9,6 +11,7 @@ public class ChatResponse {
     private String model;
     private List<Choice> choices;
     private Usage usage;
+    @JsonProperty("system_fingerprint")
     private String systemFingerprint;
 
     // Constructor
